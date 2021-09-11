@@ -1,4 +1,4 @@
-package yfathi.kafka.tennis.model;
+package yfathi.kata.tennis.model;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -6,18 +6,18 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class Game {
-    private final Map<Player,Score> playersScore;
-    private Outcome outcome;
+    private final Map<Integer,Score> playersScore;
+    private Score outcome;
     private Player outcomePlayer;
 
 
-    public Game(Player player1,Player player2) {
+    public Game() {
         this.playersScore = new HashMap<>();
-     this.playersScore.put(player1,Score.SO);
-     this.playersScore.put(player2,Score.SO);
+     this.playersScore.put(0,Score.SO);
+     this.playersScore.put(1,Score.SO);
     }
 
-    public Score getScore(Object key) {
+    public Score getScore(Integer key) {
         return playersScore.get(key);
     }
 
@@ -25,21 +25,27 @@ public class Game {
         return playersScore.values();
     }
 
-    public Score replaceScore(Player key, Score value) {
+    public Score replaceScore(Integer key, Score value) {
         return playersScore.replace(key, value);
     }
 
-    public Outcome getOutcome() {
+    public void resetScores(Score value) {
+         playersScore.replace(0,value);
+         playersScore.replace(1,value);
+    }
+
+    public Score getOutcome() {
         return outcome;
     }
 
-    public void setOutcome(Outcome outcome) {
+    public void setOutcome(Score outcome) {
         this.outcome = outcome;
     }
 
     public Player getOutcomePlayer() {
         return outcomePlayer;
     }
+
 
     public void setOutcomePlayer(Player outcomePlayer) {
         this.outcomePlayer = outcomePlayer;
@@ -49,9 +55,10 @@ public class Game {
     public String toString() {
 
         StringBuilder sb = new StringBuilder();
-        sb.append(playersScore.values().stream().map(Score::getLabel).collect(Collectors.joining("-")));
-        if(outcome != null){
-            sb.append("\n");
+        if(outcome == null){
+            sb.append(playersScore.values().stream().map(Score::getLabel).collect(Collectors.joining("-")));
+
+        }else{
             sb.append(outcome.getLabel());
             sb.append(" for ");
             sb.append(outcomePlayer);

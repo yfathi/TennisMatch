@@ -1,4 +1,6 @@
-package yfathi.kafka.tennis.model;
+package yfathi.kata.tennis.model;
+
+import java.util.Objects;
 
 public class Player {
     private String firstName;
@@ -27,5 +29,18 @@ public class Player {
 
     public String toString() {
         return this.firstName + " " + this.lastName;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Player player = (Player) o;
+        return Objects.equals(firstName, player.firstName) && Objects.equals(lastName, player.lastName);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(firstName, lastName);
     }
 }
