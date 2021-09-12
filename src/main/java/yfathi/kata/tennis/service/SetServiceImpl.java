@@ -8,11 +8,19 @@ import yfathi.kata.tennis.model.Set;
 
 import java.util.List;
 
+/**
+ * The type Set service.
+ */
 public class SetServiceImpl implements SetService {
 
     private final List<Player> players;
     private final GameService gameService;
 
+    /**
+     * Instantiates a new Set service.
+     *
+     * @param players the players
+     */
     public SetServiceImpl(List<Player> players) {
         this.players = players;
         this.gameService = new GameServiceImpl(players);
@@ -36,10 +44,11 @@ public class SetServiceImpl implements SetService {
             throw new RuleException("Set Ended, You can't win points");
 
         // Win point in current game
-
         if (set.getCurrentGame().isOngoing()) {
+            // same game
             gameService.winPoint(set.getCurrentGame(), player);
         } else {
+            // new game
             set.setCurrentGame(gameService.init());
             gameService.winPoint(set.getCurrentGame(), player);
 
@@ -64,9 +73,15 @@ public class SetServiceImpl implements SetService {
         final Player opponent = players.get(player == 1 ? 0 : 1);
 
         if (!currentGame.isOngoing()) {
-            // set win  min points
-            final var minWin = set.getScoreSet().get(opponent) < 5 ? 6 : 7;
 
+            // check for Suit and Tie
+            if(set.getScore(players.get(player))==5 && set.getScore(opponent)==6){
+                set.setTie(true);
+            }
+
+            // set win min points
+            final Integer opScore = set.getScoreSet().get(opponent);
+            final var minWin = set.isTie()?(opScore+2):opScore < 5 ? 6 : 7;
             // check for win
             if (set.addScore(currentGame.getOutcomePlayer()) == minWin) {
                 set.setOutcome(Score.SWIN);

@@ -18,7 +18,6 @@ public class TestGame {
     static Player player1;
     static Player player2;
     GameService gameService;
-    Game game;
 
     @BeforeAll
     static void preparePlayers(){
@@ -29,29 +28,26 @@ public class TestGame {
     @BeforeEach
     void prepare(){
          gameService = new GameServiceImpl(List.of(player1,player2));
-         game = gameService.init();
     }
 
     @Test
     void testOneWinsAll() throws RuleException {
-        GameService gameService = new GameServiceImpl(List.of(player1,player2));
         Game game = gameService.init();
-        Assertions.assertEquals(game.getScore(1), Score.SO);
+        Assertions.assertEquals( Score.SO,game.getScore(1));
         gameService.winPoint(game, 1);
-        Assertions.assertEquals(game.getScore(1), Score.S15);
+        Assertions.assertEquals(Score.S15,game.getScore(1));
         gameService.winPoint(game, 1);
-        Assertions.assertEquals(game.getScore(1), Score.S30);
+        Assertions.assertEquals( Score.S30,game.getScore(1));
         gameService.winPoint(game, 1);
-        Assertions.assertEquals(game.getScore(1), Score.S40);
+        Assertions.assertEquals(Score.S40,game.getScore(1));
         gameService.winPoint(game, 1);
-        Assertions.assertEquals(game.getOutcome(), Score.GWIN);
-        Assertions.assertEquals(game.getOutcomePlayer(), player2);
-        Assertions.assertEquals(game.getScore(1), Score.S40);
-        Assertions.assertEquals(game.getScore(0), Score.SO);
+        Assertions.assertEquals(Score.GWIN,game.getOutcome() );
+        Assertions.assertEquals(player2,game.getOutcomePlayer() );
+        Assertions.assertEquals(Score.S40,game.getScore(1) );
+        Assertions.assertEquals(Score.SO,game.getScore(0) );
     }
     @Test
     void testDeuce() throws RuleException {
-        GameService gameService = new GameServiceImpl(List.of(player1,player2));
         Game game = gameService.init();
         gameService.winPoint(game, 1);
         gameService.winPoint(game, 0);
@@ -59,24 +55,24 @@ public class TestGame {
         gameService.winPoint(game, 0);
         gameService.winPoint(game, 1);
         gameService.winPoint(game, 0);
-        Assertions.assertEquals(game.getScore(0), Score.S40);
-        Assertions.assertEquals(game.getScore(1), Score.S40);
+        Assertions.assertEquals(Score.S40,game.getScore(0) );
+        Assertions.assertEquals(Score.S40,game.getScore(1));
         gameService.winPoint(game, 0);
-        Assertions.assertEquals(game.getOutcome(), Score.ADV);
-        Assertions.assertEquals(game.getOutcomePlayer(), player1);
+        Assertions.assertEquals(Score.ADV,game.getOutcome());
+        Assertions.assertEquals(player1,game.getOutcomePlayer() );
         gameService.winPoint(game, 1);
-        Assertions.assertEquals(game.getScore(0), Score.S40);
-        Assertions.assertEquals(game.getScore(1), Score.S40);
-        Assertions.assertEquals(game.getOutcome(), null);
-        gameService.winPoint(game, 1);
-        Assertions.assertEquals(game.getOutcome(), Score.ADV);
-        Assertions.assertEquals(game.getOutcomePlayer(), player2);
+        Assertions.assertEquals( Score.S40,game.getScore(0));
+        Assertions.assertEquals(Score.S40,game.getScore(1) );
+        Assertions.assertNull(game.getOutcome());
+        gameService.winPoint(game,1);
+        Assertions.assertEquals(Score.ADV,game.getOutcome() );
+        Assertions.assertEquals(player2,game.getOutcomePlayer());
         gameService.winPoint(game, 0);
         gameService.winPoint(game, 0);
-        Assertions.assertEquals(game.getOutcome(), Score.ADV);
+        Assertions.assertEquals(Score.ADV,game.getOutcome() );
         gameService.winPoint(game, 0);
-        Assertions.assertEquals(game.getOutcome(), Score.GWIN);
-        Assertions.assertEquals(game.getOutcomePlayer(), player1);
+        Assertions.assertEquals(Score.GWIN,game.getOutcome()) ;
+        Assertions.assertEquals(player1,game.getOutcomePlayer());
 
 
 

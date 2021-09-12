@@ -15,7 +15,7 @@ public class TennisMatch {
 
 
     public static void main(String[] args) throws RuleException {
-        //new TennisMatch().gameSample();
+        new TennisMatch().gameSample();
         new TennisMatch().setSample();
 
     }
@@ -27,15 +27,10 @@ public class TennisMatch {
         SetService setService = new SetServiceImpl(List.of(player1,player2));
         Set set = setService.init();
 
-        for (int i = 0; i < 20; i++) {
+        for (int i = 0; i < 24; i++) {
             setService.winPoint(set, 0);
         }
-        for (int i = 0; i < 20; i++) {
-            setService.winPoint(set, 1);
-        }
-        for (int i = 0; i < 8; i++) {
-            setService.winPoint(set, 0);
-        }
+
 
     }
 
