@@ -29,13 +29,13 @@ public class TestGame {
     @BeforeEach
     void prepare(){
          gameService = new GameServiceImpl(List.of(player1,player2));
-         game = gameService.initGame();
+         game = gameService.init();
     }
 
     @Test
     void testOneWinsAll() throws RuleException {
         GameService gameService = new GameServiceImpl(List.of(player1,player2));
-        Game game = gameService.initGame();
+        Game game = gameService.init();
         Assertions.assertEquals(game.getScore(1), Score.SO);
         gameService.winPoint(game, 1);
         Assertions.assertEquals(game.getScore(1), Score.S15);
@@ -44,7 +44,7 @@ public class TestGame {
         gameService.winPoint(game, 1);
         Assertions.assertEquals(game.getScore(1), Score.S40);
         gameService.winPoint(game, 1);
-        Assertions.assertEquals(game.getOutcome(), Score.WIN);
+        Assertions.assertEquals(game.getOutcome(), Score.GWIN);
         Assertions.assertEquals(game.getOutcomePlayer(), player2);
         Assertions.assertEquals(game.getScore(1), Score.S40);
         Assertions.assertEquals(game.getScore(0), Score.SO);
@@ -52,7 +52,7 @@ public class TestGame {
     @Test
     void testDeuce() throws RuleException {
         GameService gameService = new GameServiceImpl(List.of(player1,player2));
-        Game game = gameService.initGame();
+        Game game = gameService.init();
         gameService.winPoint(game, 1);
         gameService.winPoint(game, 0);
         gameService.winPoint(game, 1);
@@ -75,7 +75,7 @@ public class TestGame {
         gameService.winPoint(game, 0);
         Assertions.assertEquals(game.getOutcome(), Score.ADV);
         gameService.winPoint(game, 0);
-        Assertions.assertEquals(game.getOutcome(), Score.WIN);
+        Assertions.assertEquals(game.getOutcome(), Score.GWIN);
         Assertions.assertEquals(game.getOutcomePlayer(), player1);
 
 

@@ -16,32 +16,30 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
-    public Game initGame() {
+    public Game init() {
         return new Game();
     }
 
     @Override
-    public boolean winPoint(Game game, int player) throws RuleException {
+    public void winPoint(Game game, int player) throws RuleException {
 
         // compute new score
         Score nextScore = this.nextScore(player, game);
         game.replaceScore(player, nextScore);
 
-        System.out.println(displayGameScore(game));
+        System.out.println(displayScore(game));
 
-        // true if the game still going
-        return Score.WIN != game.getOutcome();
     }
 
 
     @Override
-    public String displayGameScore(Game game) {
-        return "Current Score :\n" + game;
+    public String displayScore(Game game) {
+        return "Current Game :\n" + game;
     }
 
-    @Override
+
     public Score nextScore(int playerId, Game game) throws RuleException {
-        if (Score.WIN.equals(game.getOutcome()))
+        if (!game.isOngoing())
         throw new RuleException("Game Ended, You can't win points");
 
         final Score score = game.getScore(playerId);
@@ -79,7 +77,7 @@ public class GameServiceImpl implements GameService {
             if (player.equals(game.getOutcomePlayer()) ) {
                 // Is there already an Advantage ?
                 // You win
-                game.setOutcome(Score.WIN);
+                game.setOutcome(Score.GWIN);
                 game.setOutcomePlayer(player);
 
             } else if (opponent.equals(game.getOutcomePlayer())) {
@@ -96,7 +94,7 @@ public class GameServiceImpl implements GameService {
         }else {
             // If no Deuce then WIN
             game.setOutcomePlayer(player);
-            game.setOutcome(Score.WIN);
+            game.setOutcome(Score.GWIN);
         }
 
 
