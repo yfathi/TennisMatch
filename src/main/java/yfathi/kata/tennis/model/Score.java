@@ -7,7 +7,8 @@ public enum Score {
     S30("30"),
     S40("40"),
     ADV("Advantage"),
-    WIN("GameWin");
+    GWIN("Game Win"),
+    SWIN("Set");
 
     private String label;
 

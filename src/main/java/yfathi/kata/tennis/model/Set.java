@@ -1,46 +1,48 @@
 package yfathi.kata.tennis.model;
 
-import java.util.Collection;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class Game {
-    private final Map<Integer,Score> playersScore;
+public class Set {
+    private final List<Game> games;
+    private final Map<Player,Integer> scoreSet;
     private Score outcome;
     private Player outcomePlayer;
     private boolean ongoing =true;
 
 
-    public Game() {
-        this.playersScore = new HashMap<>();
-     this.playersScore.put(0,Score.SO);
-     this.playersScore.put(1,Score.SO);
+    public Set() {
+    this.games = new ArrayList<>();
+    this.scoreSet = new HashMap<>();
     }
 
-    public Score getScore(Integer key) {
-        return playersScore.get(key);
+
+
+    public List<Game> getGames() {
+        return games;
     }
 
-    public Collection<Score> getScores() {
-        return playersScore.values();
-    }
-
-    public Score replaceScore(Integer key, Score value) {
-        return playersScore.replace(key, value);
-    }
-
-    public void resetScores(Score value) {
-         playersScore.replace(0,value);
-         playersScore.replace(1,value);
+    public Map<Player, Integer> getScoreSet() {
+        return scoreSet;
     }
 
     public Score getOutcome() {
         return outcome;
     }
 
+    public Game getCurrentGame() {
+        return games.get(games.size()-1);
+    }
+
+    public void setCurrentGame(Game currentGame) {
+        this.games.add(currentGame);
+    }
+
     public void setOutcome(Score outcome) {
-        if(Score.GWIN.equals(outcome)) ongoing =false;
+        if(Score.SWIN.equals(outcome)) ongoing =false;
         this.outcome = outcome;
     }
 
@@ -48,9 +50,15 @@ public class Game {
         return outcomePlayer;
     }
 
-
     public void setOutcomePlayer(Player outcomePlayer) {
         this.outcomePlayer = outcomePlayer;
+    }
+
+    public Integer addScore(Player player){
+        var newScore = scoreSet.get(player)+1;
+
+        scoreSet.put(player,newScore);
+        return newScore;
     }
 
     public boolean isOngoing() {
@@ -63,12 +71,12 @@ public class Game {
 
     @Override
     public String toString() {
-
         StringBuilder sb = new StringBuilder();
 
-            sb.append(playersScore.values().stream().map(Score::getLabel).collect(Collectors.joining("-")));
-            if(outcome != null){
-                sb.append("\n");
+        sb.append(scoreSet.values().stream().map(Object::toString).collect(Collectors.joining("-")));
+
+        if(outcome != null){
+            sb.append("\n");
             sb.append(outcome.getLabel());
             sb.append(" for ");
             sb.append(outcomePlayer);
