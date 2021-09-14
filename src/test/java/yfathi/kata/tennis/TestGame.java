@@ -31,9 +31,13 @@ public class TestGame {
     }
 
     @Test
-    void testOneWinsAll() throws RuleException {
+    void testInitGame() throws RuleException {
         Game game = gameService.init();
         Assertions.assertEquals( Score.SO,game.getScore(1));
+    }
+    @Test
+    void testScores() throws RuleException {
+        Game game = gameService.init();
         gameService.winPoint(game, 1);
         Assertions.assertEquals(Score.S15,game.getScore(1));
         gameService.winPoint(game, 1);
@@ -41,11 +45,20 @@ public class TestGame {
         gameService.winPoint(game, 1);
         Assertions.assertEquals(Score.S40,game.getScore(1));
         gameService.winPoint(game, 1);
+    }
+    @Test
+    void testOneWinsAll() throws RuleException {
+        Game game = gameService.init();
+        gameService.winPoint(game, 1);
+        gameService.winPoint(game, 1);
+        gameService.winPoint(game, 1);
+        gameService.winPoint(game, 1);
         Assertions.assertEquals(Score.GWIN,game.getOutcome() );
         Assertions.assertEquals(player2,game.getOutcomePlayer() );
         Assertions.assertEquals(Score.S40,game.getScore(1) );
         Assertions.assertEquals(Score.SO,game.getScore(0) );
     }
+
     @Test
     void testDeuce() throws RuleException {
         Game game = gameService.init();
@@ -73,11 +86,55 @@ public class TestGame {
         gameService.winPoint(game, 0);
         Assertions.assertEquals(Score.GWIN,game.getOutcome()) ;
         Assertions.assertEquals(player1,game.getOutcomePlayer());
-
-
-
+    }
+    @Test
+    void testAdvantageWithDeuceActivated() throws RuleException {
+        Game game = gameService.init();
+        gameService.winPoint(game, 1);
+        gameService.winPoint(game, 0);
+        gameService.winPoint(game, 1);
+        gameService.winPoint(game, 0);
+        gameService.winPoint(game, 1);
+        gameService.winPoint(game, 0);
+        Assertions.assertEquals(Score.S40,game.getScore(0) );
+        Assertions.assertEquals(Score.S40,game.getScore(1));
+        gameService.winPoint(game, 0);
+        Assertions.assertEquals(Score.ADV,game.getOutcome());
+        Assertions.assertEquals(player1,game.getOutcomePlayer() );
+    }
+    @Test
+    void testGoBackToDeuce() throws RuleException {
+        Game game = gameService.init();
+        gameService.winPoint(game, 1);
+        gameService.winPoint(game, 0);
+        gameService.winPoint(game, 1);
+        gameService.winPoint(game, 0);
+        gameService.winPoint(game, 1);
+        gameService.winPoint(game, 0);
+        gameService.winPoint(game, 0);
+        gameService.winPoint(game, 1);
+        gameService.winPoint(game,1);
+        Assertions.assertEquals(Score.ADV,game.getOutcome() );
+        Assertions.assertEquals(player2,game.getOutcomePlayer());
+        gameService.winPoint(game, 0);
+        Assertions.assertNull(game.getOutcome() );
 
     }
-
+    @Test
+    void testWinAfterDeuce() throws RuleException {
+        Game game = gameService.init();
+        gameService.winPoint(game, 1);
+        gameService.winPoint(game, 0);
+        gameService.winPoint(game, 1);
+        gameService.winPoint(game, 0);
+        gameService.winPoint(game, 1);
+        gameService.winPoint(game, 0);
+        gameService.winPoint(game, 0);
+        Assertions.assertEquals(Score.ADV,game.getOutcome());
+        Assertions.assertEquals(player1,game.getOutcomePlayer() );
+        gameService.winPoint(game, 0);
+        Assertions.assertEquals(Score.GWIN,game.getOutcome()) ;
+        Assertions.assertEquals(player1,game.getOutcomePlayer());
+    }
 
 }
